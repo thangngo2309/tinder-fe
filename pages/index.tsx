@@ -1,9 +1,40 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import { useState, useEffect } from 'react';
+import { Alert, Button, Form } from 'react-bootstrap'
+import { signIn } from '../public/services/auth.services'
+import styles from '../styles/Home.module.scss'
+import userStore from '../public/stores/user';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 const Home: NextPage = () => {
+
+  const { login, accessToken } = userStore((state) => state)
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const router = useRouter();
+
+  useEffect(() => {
+    if(accessToken) {
+      router.push('./add-friends');
+    }
+  }, []);
+
+  const onSubmit = async () => {
+    if (!username) { setError('Please enter username!'); return; }
+    if (!password) { setError('Please enter password!'); return; }
+
+    const obj = { username, password };
+    console.log(obj)
+    setError('');
+
+    const data = await signIn(obj);
+    login(data)
+  };
+
   return (
     <div className={styles.container}>
       <Head>
@@ -13,58 +44,25 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+        <Form>
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Label>username</Form.Label>
+            <Form.Control type="text" onChange={(e) => setUsername(e.target.value)} />
+          </Form.Group>
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.tsx</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h2>Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
+          <Form.Group className="mb-3" controlId="formBasicPassword">
+            <Form.Label>Password</Form.Label>
+            <Form.Control type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
+          </Form.Group>
+          {error && <Alert variant="danger" >{error}</Alert>}
+          <Button variant="primary" className='me-2' onClick={onSubmit}>
+            Login
+          </Button>
+          <Link href="/sign-up">
+            <a href="/sign-up">{'Registor'}</a>
+          </Link>
+        </Form>
       </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
-      </footer>
     </div>
   )
 }

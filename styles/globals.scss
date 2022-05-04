@@ -1,3 +1,10 @@
+$danger: #ff5445 !default;
+$font-family-sans-serif: Roboto-Regular, "Helvetica Neue", Helvetica, Tahoma, Arial, sans-serif;
+$h6-font-size: .9rem !default;
+$h7-font-size: 1.9rem !default;
+$border-color: rgba(0,0,0,.05);
+@import './bootstrap/bootstrap';
+
 html,
 body {
   padding: 0;
