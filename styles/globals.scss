@@ -5,6 +5,10 @@ $h7-font-size: 1.9rem !default;
 $border-color: rgba(0,0,0,.05);
 @import './bootstrap/bootstrap';
 
+@import "~swiper/css";
+@import "~swiper/css/effect-creative";
+@import './swiper';
+
 html,
 body {
   padding: 0;

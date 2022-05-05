@@ -16,3 +16,12 @@ export const getUserInfo = async (userId: any) => {
     const user = await Axios.default.get(`${baseUrl}/users/${userId}`, params, makeConfig());
     return user
 }
+
+export const getFriends = (pageIndex) => {
+    return Axios.default.get(`https://dummyapi.io/data/v1/user?limit=10&page=${pageIndex}`, {
+        headers: {  
+            "app-id": "6112dc7c3f812e0d9b6679dd",
+            "Content-Type": "application/json"
+        },
+    });
+}

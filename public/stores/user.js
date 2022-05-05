@@ -7,6 +7,24 @@ let store = (set) => ({
   userId: null,
   username: null,
   email: null,
+  like: [],
+  pass: [],
+
+  likeFriend: (data) => {
+    set((state) => ({
+      ...state,
+      like: [...state.like, data]
+      // like: []
+    }))
+  },
+
+  passFriend: (data) => {
+    set((state) => ({
+      ...state,
+      pass: [...state.pass, data]
+      // pass: []
+    }))
+  },
 
   login: (data) => {
     set((state) => ({
